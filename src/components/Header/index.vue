@@ -66,7 +66,7 @@ const userName = ref('')
 
       .loginList {
         position: absolute;
-        left: 40px;
+        left: 100px;
 
         p {
           float: left;
@@ -86,7 +86,7 @@ const userName = ref('')
 
       .typeList {
         position: absolute;
-        right: 40px;
+        right: 100px;
 
         a {
           padding: 0 10px;
@@ -112,7 +112,7 @@ const userName = ref('')
 
     .logoArea {
       position: absolute;
-      left: 40px;
+      left: 80px;
 
       .logo {
         img {
@@ -124,7 +124,7 @@ const userName = ref('')
 
     .searchArea {
       position: absolute;
-      right: 40px;
+      right: 100px;
       margin-top: 35px;
 
       .searchForm {

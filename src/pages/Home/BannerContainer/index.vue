@@ -1,12 +1,19 @@
 <script setup>
-
+  import Banner from '../../../components/Banner/index.vue';
+  
+  const bannerList = [
+    {id: 1, imgUrl: '../../src/assets/banner/banner1.jpg'},
+    {id: 2, imgUrl: '../../src/assets/banner/banner2.jpg'},
+    {id: 3, imgUrl: '../../src/assets/banner/banner3.jpg'},
+    {id: 4, imgUrl: '../../src/assets/banner/banner4.jpg'},
+  ]
 </script>
 
 <template>
   <div class="container">
     <!-- 轮播 -->
     <div class="banner">
-      <Banner></Banner>
+      <Banner :list="bannerList"></Banner>
     </div>
     <div class="right">
       <div class="news">
@@ -82,13 +89,13 @@
 
 <style lang="less" scoped>
 .container {
-  width: 84%;
   height: 527px;
-  padding-left: 210px;
+  padding-left: 307px;
+  position: relative;
 
   .banner {
     box-sizing: border-box;
-    width: 75%;
+    width: 69%;
     height: 100%;
     padding: 5px;
     float: left;
@@ -96,12 +103,12 @@
 
   .right {
     float: left;
-    width: 23%;
+    width: 24%;
 
     .news {
       border: 1px solid #e4e4e4;
       margin-top: 5px;
-      height: 527px;
+      height: 517px;
 
       h4 {
         border-bottom: 1px solid #e4e4e4;

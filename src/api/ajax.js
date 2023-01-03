@@ -4,3 +4,4 @@ import Axios from "./index.js";
 export const reqCategoryList = () => {
   return Axios.get('/product/getBaseCategoryList').then(res => res.data.data);
 }
+

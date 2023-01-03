@@ -88,7 +88,7 @@ const enterShow = () => {
     color: #fff;
     font-size: 16px;
     font-weight: bold;
-    margin-left: 45px;
+    margin-left: 95px;
   }
 
   .nav {
@@ -105,10 +105,9 @@ const enterShow = () => {
 
   .sort {
     position: absolute;
-    left: 45px;
+    left: 95px;
     top: 47px;
     width: 210px;
-    height: 461px;
     position: absolute;
     background: #fafafa;
     z-index: 999;

@@ -1,24 +1,28 @@
 <script setup>
-  
+  import { Swiper, SwiperSlide, } from 'swiper/vue';
+  import 'swiper/css';
+  import 'swiper/css/navigation';
+  import 'swiper/css/pagination';
+
+  const props = defineProps({
+    list: Array
+  });
+
+  const { list } = props; 
+ 
 </script>
 
 <template>
-  <div class="swiper-container">
-    <div class="swiper-wrapper">
-      <div class="swiper-slide">
-        <img src="" alt="">
-      </div>
-    </div>
+  <swiper >
+    <swiper-slide v-for="item in list" :key="item.id" class="">
+      <img :src="item.imgUrl" alt="">
+    </swiper-slide>
 
-    <!-- 分页器 -->
-    <div class="swiper-pagination"></div>
-
-    <!-- 导航按钮 -->
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
-  </div>
+  </swiper>
 </template>
 
 <style lang="less" scoped>
-
+.swiper-slide {
+  width: 951px;
+}
 </style>
