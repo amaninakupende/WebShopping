@@ -56,17 +56,19 @@ const userName = ref('')
 .header {
   position: relative;
   height: 160px;
+
   .top {
     background-color: #eaeaea;
     height: 40px;
     line-height: 40px;
 
     .container {
-      width: 100%;
+      width: 1500px;
+      margin: 0 auto;
+      overflow: hidden;
 
       .loginList {
-        position: absolute;
-        left: 100px;
+        float: left;
 
         p {
           float: left;
@@ -85,8 +87,7 @@ const userName = ref('')
       }
 
       .typeList {
-        position: absolute;
-        right: 100px;
+        float: right;
 
         a {
           padding: 0 10px;
@@ -108,11 +109,12 @@ const userName = ref('')
   }
 
   .bottom {
-    width: 100%;
+    width: 1500px;
+    margin: 0 auto;
+    overflow: hidden;
 
     .logoArea {
-      position: absolute;
-      left: 80px;
+      float: left;
 
       .logo {
         img {
@@ -123,12 +125,11 @@ const userName = ref('')
     }
 
     .searchArea {
-      position: absolute;
-      right: 100px;
+      float: right;
       margin-top: 35px;
 
       .searchForm {
-
+        overflow: hidden;
         input {
           box-sizing: border-box;
           width: 490px;

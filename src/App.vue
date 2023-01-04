@@ -1,11 +1,11 @@
 <script setup>
-  import Header from './components/Header/index.vue'
   
 </script>
 
 <template>
   <Header></Header>
   <router-view></router-view>
+  <Footer></Footer>
 </template>
 
 <style >

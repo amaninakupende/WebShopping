@@ -1,14 +1,20 @@
 <script setup>
-import TypeNav from '../../components/TypeNav/index.vue';
 import BannerContainer from './BannerContainer/index.vue';
 import TodayRecommend from './TodayRecommend/index.vue';
+import Rank from './Rank/index.vue';
+import Like from './Like/index.vue';
+import Floor from './Floor/index.vue';
+
 </script>
 
 <template>
   <div>
-    <TypeNav></TypeNav>
-    <BannerContainer></BannerContainer>
-    <TodayRecommend></TodayRecommend>
+    <TypeNav />
+    <BannerContainer />
+    <TodayRecommend />
+    <Rank />
+    <Like />
+    <Floor></Floor>
   </div>
 </template>
 

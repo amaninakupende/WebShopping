@@ -22,7 +22,5 @@
 </template>
 
 <style lang="less" scoped>
-.swiper-slide {
-  width: 951px;
-}
+
 </style>

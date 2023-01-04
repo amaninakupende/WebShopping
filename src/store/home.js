@@ -11,6 +11,9 @@ export const useHomeStore = defineStore({
       this.categoryList = val;
     },
     
+    setFloorList(val) {
+      this.floorList = val;
+    }
     // async getCategoryList() {
     //   let res = await reqCategoryList();
     //   this.categoryList = res;

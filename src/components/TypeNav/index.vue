@@ -32,54 +32,60 @@ const enterShow = () => {
 
 <template>
   <div class="type-nav">
-    <div @mouseleave="leaveShow" @mouseenter="enterShow">
-      <h2 class="all">全部商品分类</h2>
-      <div class="sort">
-        <div class="all-sort-list2">
-          <div class="item" v-for="(item, idx) in categoryList" :key="item.categoryId">
-            <h3 :class="{ cur: currentIndex === idx }" @mouseenter="changeIndex(idx)">
-              <a :data-categoryName="item.categoryName" :data-category1Id="item.categoryId">{{item.categoryName}}</a>
-            </h3>
-            <div class="item-list clearfix" :style="{ display: currentIndex === idx ? 'block' : 'none' }">
-              <div class="subitem">
-                <dl class="item2" v-for="item2 in item.categoryChild" :key="item2.categoryId">
-                  <dt>
-                    <a :data-categoryName="item2.categoryName" :data-category2Id="item2.categoryId">{{item2.categoryName}}</a>
-                  </dt>
-                  <dd>
-                    <div class="item3" v-for="item3 in item2.categoryChild" :key="item3.categoryId">
-                      <a :data-categoryName="item3.categoryName" :data-category3Id="item3.categoryId">{{item3.categoryName}}</a>
-                    </div>
-                  </dd>
-                </dl>
+    <div class="container">
+      <div @mouseleave="leaveShow" @mouseenter="enterShow">
+        <h2 class="all">全部商品分类</h2>
+        <div class="sort">
+          <div class="all-sort-list2">
+            <div class="item" v-for="(item, idx) in categoryList" :key="item.categoryId">
+              <h3 :class="{ cur: currentIndex === idx }" @mouseenter="changeIndex(idx)">
+                <a :data-categoryName="item.categoryName" :data-category1Id="item.categoryId">{{ item.categoryName }}</a>
+              </h3>
+              <div class="item-list clearfix" :style="{ display: currentIndex === idx ? 'block' : 'none' }">
+                <div class="subitem">
+                  <dl class="item2" v-for="item2 in item.categoryChild" :key="item2.categoryId">
+                    <dt>
+                      <a :data-categoryName="item2.categoryName"
+                        :data-category2Id="item2.categoryId">{{ item2.categoryName }}</a>
+                    </dt>
+                    <dd>
+                      <div class="item3" v-for="item3 in item2.categoryChild" :key="item3.categoryId">
+                        <a :data-categoryName="item3.categoryName"
+                          :data-category3Id="item3.categoryId">{{ item3.categoryName }}</a>
+                      </div>
+                    </dd>
+                  </dl>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <nav class="nav">
+        <a href="###">服装城</a>
+        <a href="###">美妆馆</a>
+        <a href="###">尚品汇超市</a>
+        <a href="###">全球购</a>
+        <a href="###">闪购</a>
+        <a href="###">团购</a>
+        <a href="###">有趣</a>
+        <a href="###">秒杀</a>
+      </nav>
     </div>
-    <nav class="nav">
-      <a href="###">服装城</a>
-      <a href="###">美妆馆</a>
-      <a href="###">尚品汇超市</a>
-      <a href="###">全球购</a>
-      <a href="###">闪购</a>
-      <a href="###">团购</a>
-      <a href="###">有趣</a>
-      <a href="###">秒杀</a>
-    </nav>
   </div>
 </template>
 
 <style lang="less" scoped>
 .type-nav {
   border-bottom: 2px solid #e1251b;
-  width: 100%;
-  margin: 0 auto;
-  display: flex;
-  position: relative;
+ 
+  .container {
+    width: 1500px;
+    margin: 0 auto;
+    display: flex;
+    position: relative;
 
-  .all {
+    .all {
     width: 210px;
     height: 45px;
     background-color: #e1251b;
@@ -88,7 +94,6 @@ const enterShow = () => {
     color: #fff;
     font-size: 16px;
     font-weight: bold;
-    margin-left: 95px;
   }
 
   .nav {
@@ -105,7 +110,7 @@ const enterShow = () => {
 
   .sort {
     position: absolute;
-    left: 95px;
+    left: 0;
     top: 47px;
     width: 210px;
     position: absolute;
@@ -189,6 +194,7 @@ const enterShow = () => {
         }
       }
     }
+  }
   }
 }
 </style>
