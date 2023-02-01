@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { reqFloorList } from '../../../api/ajax';
+import '../../../mock/config.js'; 
 
 const getReqFloorList = async () => {
   let result = await reqFloorList();

@@ -13,6 +13,16 @@ const routes = [
         path: '/login',
         name: 'login',
         component: () => import('../pages/Login/index.vue'),
+    },
+    {
+        path: '/search/:keyword?',
+        name: 'search',
+        component: () => import('../pages/Search/index.vue')
+    },
+    {
+        path: '/detail/:goodsId?',
+        name: 'detail',
+        component: () => import('../pages/Detail/index.vue')
     }
 ]
 

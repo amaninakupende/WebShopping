@@ -4,6 +4,7 @@ import TodayRecommend from './TodayRecommend/index.vue';
 import Rank from './Rank/index.vue';
 import Like from './Like/index.vue';
 import Floor from './Floor/index.vue';
+import Brand from './Brand/index.vue';
 
 </script>
 
@@ -14,7 +15,8 @@ import Floor from './Floor/index.vue';
     <TodayRecommend />
     <Rank />
     <Like />
-    <Floor></Floor>
+    <!-- <Floor /> -->
+    <Brand />
   </div>
 </template>
 

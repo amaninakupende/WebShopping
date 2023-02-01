@@ -1,33 +1,69 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import { useRoute,useRouter } from 'vue-router'
 //防抖
 import throttle from "lodash/throttle";
 import { reqCategoryList } from '../../api/ajax';
 import { useHomeStore } from '../../store/home.js';
 const _useHomeStore = useHomeStore();
+const route = useRoute();
+const router = useRouter();
 
 //控制三级联动显示
 const show = ref(true);
 const currentIndex = ref(-1);
+
+onMounted(() => {
+  if(route.path != '/home') {
+    show.value = false;
+  }
+})
 
 const getCategoryList = async () => {
   let res = await reqCategoryList();
   _useHomeStore.setCategoryList(res);
 }
 getCategoryList();
+
 const categoryList = computed(() => _useHomeStore.categoryList);
 
 const changeIndex = (index) => {
   currentIndex.value = index;
 }
+
 throttle(changeIndex ,20);
+
 const leaveShow = () => {
   currentIndex.value = -1;
-  show.value = false;
+  if(route.path != '/home') {
+    show.value = false;
+  }
 };
 const enterShow = () => {
   show.value = true;
 };
+const goSearch = (event) => {
+  let node = event.target;
+  console.log(node)
+  let { categoryname, category1id, category2id, category3id } = node.dataset;
+  
+  if(categoryname) {
+    let location = { name: "search"};
+    let query = { categoryName: categoryname};
+    if(category1id) {
+      query.category1Id = category1id
+    } else if(category2id) {
+      query.category2Id = category2id;
+    } else {
+      query.category3Id = category3id;
+    }
+    if(route.params) {
+      location.params = route.params;
+      location.query = query;
+      router.push(location);
+    }
+  }
+}
 </script>
 
 <template>
@@ -35,8 +71,8 @@ const enterShow = () => {
     <div class="container">
       <div @mouseleave="leaveShow" @mouseenter="enterShow">
         <h2 class="all">全部商品分类</h2>
-        <div class="sort">
-          <div class="all-sort-list2">
+        <div class="sort" v-show="show">
+          <div class="all-sort-list2" @click="goSearch">
             <div class="item" v-for="(item, idx) in categoryList" :key="item.categoryId">
               <h3 :class="{ cur: currentIndex === idx }" @mouseenter="changeIndex(idx)">
                 <a :data-categoryName="item.categoryName" :data-category1Id="item.categoryId">{{ item.categoryName }}</a>
@@ -127,7 +163,10 @@ const enterShow = () => {
           padding: 2px 20px;
           margin: 0;
 
-          & .cur {
+          a {
+              color: #333;
+          }
+          &.cur {
             background: skyblue;
           }
         }

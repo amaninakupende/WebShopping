@@ -8,3 +8,7 @@ export const reqCategoryList = () => {
 export const reqFloorList = () => {
   return mockAxios.get('/floor');
 }
+
+export const reqSearchInfo = (params) => {
+  return Axios.post('/list', params).then(res => res.data);
+}
