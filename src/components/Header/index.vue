@@ -1,6 +1,10 @@
 <script setup>
 import { ref } from 'vue';
-const userName = ref('')
+const userName = ref('');
+
+const goSearch = () => {
+  
+}
 </script>
 
 <template>

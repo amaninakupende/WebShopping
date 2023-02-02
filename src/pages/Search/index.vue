@@ -1,10 +1,12 @@
 <script setup>
 import SearchSelector from './SearchSelector/index.vue';
-import { ref, onMounted, reactive, computed } from 'vue';
+import { ref, onMounted, reactive, computed, onBeforeMount } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { reqSearchInfo } from '../../api/ajax'
+import { reqSearchInfo, reqGoodsInfo } from '../../api/ajax';
+import { useDetailStore } from '../../store/detail.js';
 const route = useRoute();
 const router = useRouter();
+const store = useDetailStore();
 
 const searchParams = reactive({
   category1Id: "",
@@ -18,18 +20,19 @@ const searchParams = reactive({
   props: [],
   trademark: "",
 })
-const _total = ref(0);
+const totalNum = ref(0);
 const _attrsList = ref([]);
 const _goodsList = ref([]);
 const _trademarkList = ref([]);
 const isTwo = ref(true);
 const isAsc = ref(true);
-
+const flag = ref(false); //判断是否加载分页器
 onMounted(() => {
   Object.assign(searchParams, route.query, route.params);
-  console.log('searchParams', searchParams)
+  console.log('searchParams', searchParams);
   getReqSearchInfo(searchParams);
 })
+
 
 const getReqSearchInfo = async (searchParams) => {
   let res = await reqSearchInfo(searchParams);
@@ -38,10 +41,19 @@ const getReqSearchInfo = async (searchParams) => {
     _attrsList.value = attrsList;
     _goodsList.value = goodsList;
     _trademarkList.value = trademarkList;
-    _total.value = total;
+    totalNum.value = total;
+    flag.value = true;
     // searchParams.pageNo = 
   }
 }
+
+const getReqGoodsInfo = async (param) => {
+  let res = await reqGoodsInfo(param);
+  if(res.code === 200) {
+    store.setGoodInfo(res.data);
+
+  }
+} 
 
 const removeCategory = () => {
   searchParams.categoryName = "";
@@ -59,8 +71,9 @@ const removeKeyword = () => {
 const changeOrder = () => {
   isAsc.value = !isAsc.value;
 }
-const clickImg = (goodsId) => {
-  router.push(`/detail/${goodsId}`)
+const clickImg = async (goodsId) => {
+  await getReqGoodsInfo(goodsId);
+  router.push(`/detail/${goodsId}`);
 }
 const getPageNo = (pageNo) => {
   searchParams.pageNo = pageNo;
@@ -129,10 +142,11 @@ const getPageNo = (pageNo) => {
           </div>
 
           <Pagination 
+            v-if="flag"
             :pageNo="searchParams.pageNo"
             :pageSize="searchParams.pageSize"
-            :total="_total"
-            :continues="5"
+            :total="totalNum"
+            :continue="5"
             @getPageNo="getPageNo"
           />
         </div>

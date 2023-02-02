@@ -12,3 +12,7 @@ export const reqFloorList = () => {
 export const reqSearchInfo = (params) => {
   return Axios.post('/list', params).then(res => res.data);
 }
+
+export const reqGoodsInfo = (skuId) => {
+  return Axios.get(`/item/${skuId}`).then(res => res.data);
+}
