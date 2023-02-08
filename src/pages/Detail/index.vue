@@ -1,12 +1,43 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useDetailStore } from '../../store/detail.js';
+import { reqAddOrUpdateShopCart } from '../../api/ajax.js';
 import Zoom from './Zoom/index.vue';
+import { useRoute,useRouter } from 'vue-router'
+const route = useRoute();
+const router = useRouter();
 const store = useDetailStore();
 
+const skuNum = ref(1); //购买产品个数
 const curIndex = ref(0);
 const changeCurIdx = (index) => {
   curIndex.value = index;
+}
+const changeActive = (SaleAttrValue, arr) => {
+  arr.forEach(item => item.isChecked = 0);
+  SaleAttrValue.isChecked = 1;
+}
+const changeSkuNum = (e) => {
+  let value = e.target.value * 1;
+  if(isNaN(value) || value < 1) {
+    skuNum.value = 1;
+  } else {
+    skuNum.value = parseInt(value);
+  }
+}
+const addShopcar = async () => {
+  let skuId = route.params.goodsId;
+  let skuNUM = skuNum.value;
+  console.log('id---', skuId)
+  console.log('num---', skuNUM)
+  let res = await reqAddOrUpdateShopCart(skuId, skuNUM);
+  window.sessionStorage.setItem("SKUINFO", JSON.stringify(store.skuInfo));
+  router.push({
+    name: "addcartsuccess",
+    query: { skuNum: skuNUM }
+  })
+  
+    
 }
 </script>
 
@@ -87,11 +118,26 @@ const changeCurIdx = (index) => {
                   <dd
                     v-for="spuSaleAttrValue in spuSaleAttr.spuSaleAttrValueList"
                     :key="spuSaleAttrValue.id"
+                    :class="{ active: spuSaleAttrValue.isChecked == 1 }"
                     @click="changeActive(spuSaleAttrValue, spuSaleAttr.spuSaleAttrValueList)"
                   >
                     {{ spuSaleAttrValue.saleAttrValueName }}
                   </dd>
                 </dl>
+              </div>
+            </div>
+            <div class="cartWrap">
+              <div class="controls">
+                <input 
+                  type="number"
+                  autocomplete="off"
+                  class="itxt"
+                  v-model="skuNum"
+                  @change="changeSkuNum"
+                />
+              </div>
+              <div class="add">
+                <a @click="addShopcar">加入购物车</a>
               </div>
             </div>
           </div>
@@ -244,6 +290,101 @@ const changeCurIdx = (index) => {
               width: 520px;
               float: left;
               color: #999;
+            }
+          }
+        }
+
+        .choose {
+          .chooseArea {
+            overflow: hidden;
+            line-height: 28px;
+            margin-top: 10px;
+
+            dl {
+              overflow: hidden;
+              margin: 13px 0;
+
+              dt {
+                margin-right: 15px;
+                float: left;
+              }
+
+              dd {
+                float: left;
+                margin-right: 5px;
+                color: #666;
+                line-height: 24px;
+                padding: 2px 14px;
+                border-top: 1px solid #eee;
+                border-right: 1px solid #bbb;
+                border-bottom: 1px solid #bbb;
+                border-left: 1px solid #eee;
+
+                &.active {
+                  color: green;
+                  border: 1px solid green;
+                }
+              }
+            }
+          }
+
+          .cartWrap {
+            .controls {
+              width: 48px;
+              position: relative;
+              float: left;
+              margin-right: 15px;
+
+              .itxt {
+                width: 38px;
+                height: 37px;
+                border: 1px solid #ddd;
+                color: #555;
+                float: left;
+                text-align: center;
+                font-size: 18px;
+                &:focus {
+                  outline: none;
+                }
+              }
+
+              .plus,
+              .mins {
+                width: 15px;
+                text-align: center;
+                height: 17px;
+                line-height: 17px;
+                background: #f1f1f1;
+                color: #666;
+                position: absolute;
+                right: -8px;
+                border: 1px solid #ccc;
+              }
+
+              .mins {
+                right: -8px;
+                top: 19px;
+                border-top: 0;
+              }
+
+              .plus {
+                right: -8px;
+              }
+            }
+
+            .add {
+              float: left;
+              height: 37px;
+
+              a {
+                background-color: #e1251b;
+                padding: 0 25px;
+                font-size: 16px;
+                color: #fff;
+                height: 36px;
+                line-height: 36px;
+                display: block;
+              }
             }
           }
         }

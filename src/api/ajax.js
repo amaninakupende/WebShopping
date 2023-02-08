@@ -16,3 +16,19 @@ export const reqSearchInfo = (params) => {
 export const reqGoodsInfo = (skuId) => {
   return Axios.get(`/item/${skuId}`).then(res => res.data);
 }
+
+export const reqCartList = () => {
+  return Axios.get('/cart/cartList').then(res => res.data);
+}
+
+export const reqAddOrUpdateShopCart = (skuId, skuNum) => {
+  return Axios.post(`/cart/addToCart/${skuId}/${skuNum}`).then(res => res.data);
+}
+
+export const reqGetCode = (phone) => {
+  return Axios.get(`/user/passport/sendCode/${phone}`).then(res => res.data);
+}
+
+export const reqUserRegister = (data) => {
+  return Axios.post(`/user/passport/login`, data).then(res => res.data);
+}
