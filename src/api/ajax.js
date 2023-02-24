@@ -24,11 +24,3 @@ export const reqCartList = () => {
 export const reqAddOrUpdateShopCart = (skuId, skuNum) => {
   return Axios.post(`/cart/addToCart/${skuId}/${skuNum}`).then(res => res.data);
 }
-
-export const reqGetCode = (phone) => {
-  return Axios.get(`/user/passport/sendCode/${phone}`).then(res => res.data);
-}
-
-export const reqUserRegister = (data) => {
-  return Axios.post(`/user/passport/login`, data).then(res => res.data);
-}

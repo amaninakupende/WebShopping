@@ -28,9 +28,7 @@ const changeSkuNum = (e) => {
 const addShopcar = async () => {
   let skuId = route.params.goodsId;
   let skuNUM = skuNum.value;
-  console.log('id---', skuId)
-  console.log('num---', skuNUM)
-  let res = await reqAddOrUpdateShopCart(skuId, skuNUM);
+  await reqAddOrUpdateShopCart(skuId, skuNUM);
   window.sessionStorage.setItem("SKUINFO", JSON.stringify(store.skuInfo));
   router.push({
     name: "addcartsuccess",
@@ -154,6 +152,7 @@ const addShopcar = async () => {
 
 <style lang="less" scoped>
 .detail {
+  margin-bottom: 20px;
   .con {
     margin: 15px auto 0;
     margin-left: 200px;

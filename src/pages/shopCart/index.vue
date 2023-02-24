@@ -5,13 +5,10 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 const getReqCartList = async () => {
   let res = await reqCartList();
-  console.log('---res', res)
 }
 onMounted(() => {
   getReqCartList();
-  
 })
-console.log('--route', route);
 </script>
 
 <template>
