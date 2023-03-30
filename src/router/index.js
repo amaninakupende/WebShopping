@@ -7,6 +7,7 @@ const routes = [
     },
     {
         path: '/home',
+        name: 'home',
         component: () => import('../pages/Home/index.vue'),
         meta: { show: true }
     },
@@ -18,7 +19,7 @@ const routes = [
         
     },
     {
-        path: '/search/:keyword?',
+        path: '/search',
         name: 'search',
         component: () => import('../pages/Search/index.vue'),
         meta: { show: true }

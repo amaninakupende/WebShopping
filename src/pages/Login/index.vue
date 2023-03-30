@@ -1,8 +1,43 @@
 <script setup>
+  import axios from 'axios';
   import { ref } from 'vue';
-  const phone = ref(null);
-  const password = ref(null);
+  import { ElMessage } from 'element-plus';
+  import { useRouter } from 'vue-router';
+  import { userStore } from '@/store/user.js'
+  const store = userStore();
+  const router = useRouter();
+  const loginParam = ref({
+    username: "",
+    password: ""
+  })
+  const loginForm = ref(null)
+  const rules = {
+    username: { required: true, message:'请输入用户名', trigger: ['blur'] },
+    password: { required: true, message:'请输入密码', trigger: ['blur'] }
+  }
   const userLogin = () => {
+    loginForm.value.validate( async (valid) => {
+      if(valid) {
+        let res = await axios.post('http://127.0.0.1:3000/login', loginParam.value);
+        const { data } = res;
+        if(data.code === 60005) {
+          ElMessage({
+            message: `登录成功`,
+            type: 'success',
+            duration: 2000
+          })
+          store.setUser(loginParam.value.username);
+          store.setToken(data.token);
+          router.push({name: 'home'})
+        } else {
+          ElMessage({
+            message: `${data.message}`,
+            type: 'error',
+            duration: 2000
+          })
+        }
+      }
+    })
     
   }
 </script>
@@ -17,7 +52,7 @@
           </div>
     
           <div class="content">
-            <form>
+            <!-- <form>
               <div class="input-text clearFix">
                 <input type="text" placeholder="邮箱/用户名/手机号" v-model="phone">
               </div>
@@ -25,8 +60,19 @@
                 <input type="text" placeholder="请输入密码" v-model="password">
               </div>
               <button class="btn" @click.prevent="userLogin">登&nbsp;&nbsp;录</button>
-            </form>
-    
+            </form> -->
+              <el-form :model="loginParam" :rules="rules" ref="loginForm">
+                <el-form-item prop="username">
+                  <el-input v-model="loginParam.username" placeholder="邮箱/用户名/手机号" />
+                </el-form-item>
+                <el-form-item prop="password">
+                  <el-input type="password" v-model="loginParam.password" placeholder="请输入密码" />
+                </el-form-item>
+                <el-form-item>
+                  <el-button @click="userLogin">登录</el-button>
+                </el-form-item>
+              </el-form>
+              
             <div class="call clearFix">
               <router-link class="register" to="/register">立即注册</router-link>
             </div>
@@ -98,45 +144,60 @@
           border: 1px solid #ddd;
           padding: 18px;
 
-          form {
-            margin: 15px 0 18px 0;
-            font-size: 12px;
-            line-height: 18px;
-
-            .input-text {
-              input {
-                width: 340px;
-                height: 40px;
-                box-sizing: border-box;
-                border: 1px solid #ccc;
-                float: left;
-                padding-top: 6px;
-                padding-bottom: 6px;
-                font-size: 19px;
-                line-height: 22px;
-                padding-right: 8px;
-                padding-left: 8px;
-                border-radius: 0 2px 2px 0;
-                outline: none;
-                margin-top: 18px;
-              }
-            }
-
-            .btn {
-              background-color: #e1251b;
-              padding: 6px;
-              border-radius: 0;
-              font-size: 19px;
-              font-family: 微软雅黑;
-              word-spacing: 4px;
-              border: 1px solid #e1251b;
-              color: #fff;
-              width: 100%;
-              height: 36px;
-              margin-top: 45px;
-              outline: none;
+          .el-input:deep {
+            .el-input__wrapper {
+              padding: 10px 11px;
+              font-size: 20px;
             }
           }
+          
+          .el-button {
+            width: 100%;
+            padding: 25px 15px;
+            font-size: 20px;
+            color: #fff;
+            background: #ea4a36;
+          }
+
+          // form {
+          //   margin: 15px 0 18px 0;
+          //   font-size: 12px;
+          //   line-height: 18px;
+
+          //   .input-text {
+          //     input {
+          //       width: 340px;
+          //       height: 40px;
+          //       box-sizing: border-box;
+          //       border: 1px solid #ccc;
+          //       float: left;
+          //       padding-top: 6px;
+          //       padding-bottom: 6px;
+          //       font-size: 19px;
+          //       line-height: 22px;
+          //       padding-right: 8px;
+          //       padding-left: 8px;
+          //       border-radius: 0 2px 2px 0;
+          //       outline: none;
+          //       margin-top: 18px;
+          //     }
+          //   }
+
+          //   .btn {
+          //     background-color: #e1251b;
+          //     padding: 6px;
+          //     border-radius: 0;
+          //     font-size: 19px;
+          //     font-family: 微软雅黑;
+          //     word-spacing: 4px;
+          //     border: 1px solid #e1251b;
+          //     color: #fff;
+          //     width: 100%;
+          //     height: 36px;
+          //     margin-top: 45px;
+          //     outline: none;
+          //   }
+          // }
 
           .call {
             margin-top: 30px;
@@ -155,13 +216,13 @@
               font-size: 19px;
               line-height: 38px;
               text-decoration: none;
+              color: #ea4a36;
             }
 
             .register:hover {
-              color: #4cb9fc;
               text-decoration: underline;
               text-decoration: none;
-
+              opacity: 0.6;
             }
           }
 

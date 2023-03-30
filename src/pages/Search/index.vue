@@ -27,6 +27,7 @@ const _trademarkList = ref([]);
 const isTwo = ref(true);
 const isAsc = ref(true);
 const flag = ref(false); //判断是否加载分页器
+
 onMounted(() => {
   Object.assign(searchParams, route.query, route.params);
   console.log('searchParams', searchParams);

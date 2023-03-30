@@ -1,9 +1,30 @@
 <script setup>
 import { ref } from 'vue';
-const userName = ref('');
+import { useRouter } from 'vue-router';
+import { reqSearchInfo } from '@/api/ajax.js';
+import { userStore } from '@/store/user.js' ;
+const store = userStore();
+const router = useRouter();
 
-const goSearch = () => {
+const userName = ref(store.username);
+const keyword = ref('');
+
+console.log('userName----',userName.value);
+
+
+
+const goSearch = async () => {
+  let param =  {
+    keyword: ''
+  }
+  param.keyword = keyword.value;
+  let res = await reqSearchInfo(param)
+  if(res.code === 200) {
+    const { data } = res;
+  }
+  console.log('===',param);
   
+  router.push({name: 'search', query: param.keyword})
 }
 </script>
 
@@ -20,7 +41,7 @@ const goSearch = () => {
           </p>
           <!-- 登录了 -->
           <p v-else>
-            <a>{{ userName }}</a>
+            <a style="color: #e93854;font-size: 18px;">{{ userName }}</a>
             <a class="register" @click="logout">退出登录</a>
           </p>
         </div>

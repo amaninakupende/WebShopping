@@ -1,6 +1,9 @@
 <script setup>
   import { ref, reactive } from 'vue';
+  import { useRouter } from 'vue-router'
   import axios from 'axios';
+  import { ElMessage } from 'element-plus'
+  const router = useRouter();
   const formRef = ref(null);
 
   const rules = {
@@ -15,13 +18,29 @@
     const loginData = loginForm.value;
     let res = await axios.post('http://127.0.0.1:3000/register', loginData);
     const { data } = res;
+    return data;
   }
   const goReg = () => {
-    formRef.value.validate(async (err) => {
-      if(err) {
-        await register();
-      } else {
-        console.log(err);
+    formRef.value.validate(async (valid) => {
+      if(valid) {
+        let data = await register();
+        if( data.code === 60000 ) {
+          ElMessage({
+            message: '注册成功',
+            type: 'success',
+            duration: 2000
+          });
+          setTimeout(() => {
+           router.push({name: 'login'})
+          }, 2000);
+        } else {
+          ElMessage({
+            message: `${data.message}`,
+            type: 'warning',
+            duration: 2000
+          })
+        }
+        
       }
     })
   }
