@@ -28,6 +28,7 @@
           })
           store.setUser(loginParam.value.username);
           store.setToken(data.token);
+          window.localStorage.setItem('user', JSON.stringify({user: loginParam.value.username, token: data.token}))
           router.push({name: 'home'})
         } else {
           ElMessage({

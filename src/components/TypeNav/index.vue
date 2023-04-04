@@ -42,27 +42,10 @@ const leaveShow = () => {
 const enterShow = () => {
   show.value = true;
 };
-const goSearch = (event) => {
-  let node = event.target;
-  console.log(node)
-  let { categoryname, category1id, category2id, category3id } = node.dataset;
-  
-  if(categoryname) {
-    let location = { name: "search"};
-    let query = { categoryName: categoryname};
-    if(category1id) {
-      query.category1Id = category1id
-    } else if(category2id) {
-      query.category2Id = category2id;
-    } else {
-      query.category3Id = category3id;
-    }
-    if(route.params) {
-      location.params = route.params;
-      location.query = query;
-      router.push(location);
-    }
-  }
+const goSearch = (e) => {
+  console.log(e)
+  const { categoryName, categoryId } = e;
+  router.push({name: "search", query: {categoryName, categoryId}});
 }
 </script>
 
@@ -72,7 +55,7 @@ const goSearch = (event) => {
       <div @mouseleave="leaveShow" @mouseenter="enterShow">
         <h2 class="all">全部商品分类</h2>
         <div class="sort" v-show="show">
-          <div class="all-sort-list2" @click="goSearch">
+          <div class="all-sort-list2" >
             <div class="item" v-for="(item, idx) in categoryList" :key="item.categoryId">
               <h3 :class="{ cur: currentIndex === idx }" @mouseenter="changeIndex(idx)">
                 <a :data-categoryName="item.categoryName" :data-category1Id="item.categoryId">{{ item.categoryName }}</a>
@@ -85,7 +68,7 @@ const goSearch = (event) => {
                         :data-category2Id="item2.categoryId">{{ item2.categoryName }}</a>
                     </dt>
                     <dd>
-                      <div class="item3" v-for="item3 in item2.categoryChild" :key="item3.categoryId">
+                      <div class="item3" v-for="item3 in item2.categoryChild" :key="item3.categoryId" @click="goSearch(item3)">
                         <a :data-categoryName="item3.categoryName"
                           :data-category3Id="item3.categoryId">{{ item3.categoryName }}</a>
                       </div>

@@ -3,6 +3,7 @@ import { onMounted } from 'vue';
 import { reqCartList } from '../../api/ajax.js';
 import { useRoute } from 'vue-router';
 const route = useRoute();
+
 const getReqCartList = async () => {
   let res = await reqCartList();
 }

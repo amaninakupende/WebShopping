@@ -22,7 +22,8 @@ const routes = [
         path: '/search',
         name: 'search',
         component: () => import('../pages/Search/index.vue'),
-        meta: { show: true }
+        meta: { show: true },
+        props: {}
     },
     {
         path: '/detail/:goodsId?',

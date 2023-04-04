@@ -17,7 +17,6 @@
     <swiper-slide v-for="item in list" :key="item.id" class="">
       <img :src="item.imgUrl" alt="">
     </swiper-slide>
-
   </swiper>
 </template>
 

@@ -3,29 +3,29 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { reqSearchInfo } from '@/api/ajax.js';
 import { userStore } from '@/store/user.js' ;
+import emitter from '../../utils/eventbus';
+
 const store = userStore();
 const router = useRouter();
 
-const userName = ref(store.username);
+const userName = ref('');
 const keyword = ref('');
 
-console.log('userName----',userName.value);
+emitter.on('delKeyword', () => {
+  keyword.value = ''
+})
 
-
-
-const goSearch = async () => {
-  let param =  {
-    keyword: ''
-  }
-  param.keyword = keyword.value;
-  let res = await reqSearchInfo(param)
-  if(res.code === 200) {
-    const { data } = res;
-  }
-  console.log('===',param);
-  
-  router.push({name: 'search', query: param.keyword})
+// userName.value = JSON.parse(window.localStorage.getItem('user')).user
+const goSearch = () => {
+  let keywords = keyword.value
+  console.log('====',router );
+  router.push({name: 'search', query:{keywords}})
 }
+const logout = ()=> {
+  window.localStorage.removeItem('user')
+  router.push({name: 'login'})
+}
+
 </script>
 
 <template>

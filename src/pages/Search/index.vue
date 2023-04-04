@@ -4,11 +4,13 @@ import { ref, onMounted, reactive, computed, onBeforeMount } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { reqSearchInfo, reqGoodsInfo } from '../../api/ajax';
 import { useDetailStore } from '../../store/detail.js';
+import emitter from '@/utils/eventbus.js'
+
 const route = useRoute();
 const router = useRouter();
 const store = useDetailStore();
 
-const searchParams = reactive({
+let searchParams = reactive({
   category1Id: "",
   category2Id: "",
   category3Id: "",
@@ -27,10 +29,15 @@ const _trademarkList = ref([]);
 const isTwo = ref(true);
 const isAsc = ref(true);
 const flag = ref(false); //判断是否加载分页器
+const isShow = ref(true);
 
 onMounted(() => {
-  Object.assign(searchParams, route.query, route.params);
-  console.log('searchParams', searchParams);
+  let param = {
+    categoryName: route.query.categoryName || "",
+    category3Id: route.query.categoryId || "",
+    keyword: route.query.keywords || ""
+  }
+  searchParams = Object.assign({}, searchParams, param)
   getReqSearchInfo(searchParams);
 })
 
@@ -57,17 +64,18 @@ const getReqGoodsInfo = async (param) => {
 } 
 
 const removeCategory = () => {
+  isShow.value = false;
   searchParams.categoryName = "";
-  searchParams.category1Id = "";
-  searchParams.category2Id = "";
+  // searchParams.category1Id = "";
+  // searchParams.category2Id = "";
   searchParams.category3Id = "";
   getReqSearchInfo(searchParams);
-  // if(route.params) {
-  //   router.push({ name: 'search', params: router.params});
-  // }
 }
 const removeKeyword = () => {
-
+  isShow.value = false;
+  searchParams.keyword = "";
+  getReqSearchInfo(searchParams);
+  emitter.emit("delKeyword")  //发送全局事件 删除顶部搜索栏中关键字
 }
 const changeOrder = () => {
   isAsc.value = !isAsc.value;
@@ -95,8 +103,8 @@ const getPageNo = (pageNo) => {
               <span>全部结果</span>
             </li>
           </ul>
-          <ul class="fl sui-tag" v-if="searchParams.categoryName">
-            <li class="with-x" >{{searchParams.categoryName}}<i @click="removeCategory">x</i></li>
+          <ul class="fl sui-tag" v-show="isShow">
+            <li class="with-x" v-if="searchParams.categoryName">{{searchParams.categoryName}}<i @click="removeCategory">x</i></li>
             <li class="with-x" v-if="searchParams.keyword">{{searchParams.keyword}}<i @click="removeKeyword">x</i></li>
           </ul>
         </div>
