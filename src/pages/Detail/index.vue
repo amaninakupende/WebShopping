@@ -4,9 +4,10 @@ import { useDetailStore } from '../../store/detail.js';
 import { reqAddOrUpdateShopCart } from '../../api/ajax.js';
 import Zoom from './Zoom/index.vue';
 import { useRoute,useRouter } from 'vue-router'
+import { getuuid } from '@/utils/uuid'
+const store = useDetailStore();
 const route = useRoute();
 const router = useRouter();
-const store = useDetailStore();
 
 const skuNum = ref(1); //购买产品个数
 const curIndex = ref(0);
@@ -26,6 +27,7 @@ const changeSkuNum = (e) => {
   }
 }
 const addShopcar = async () => {
+  store.setuuid(getuuid())
   let skuId = route.params.goodsId;
   let skuNUM = skuNum.value;
   await reqAddOrUpdateShopCart(skuId, skuNUM);
@@ -34,8 +36,6 @@ const addShopcar = async () => {
     name: "addcartsuccess",
     query: { skuNum: skuNUM }
   })
-  
-    
 }
 </script>
 

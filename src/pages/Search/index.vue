@@ -57,6 +57,8 @@ const getReqSearchInfo = async (searchParams) => {
 
 const getReqGoodsInfo = async (param) => {
   let res = await reqGoodsInfo(param);
+  console.log('-----',res);
+  
   if(res.code === 200) {
     store.setGoodInfo(res.data);
 
@@ -136,8 +138,7 @@ const getPageNo = (pageNo) => {
                   
                   <div class="operate">
                     <a
-                      href="success-cart.html"
-                      target="_blank"
+                      href="javascript:void(0);"
                       class="sui-btn btn-bordered btn-danger"
                       >加入购物车</a
                     >

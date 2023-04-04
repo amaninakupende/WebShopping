@@ -6,6 +6,7 @@ const route = useRoute();
 
 const getReqCartList = async () => {
   let res = await reqCartList();
+  console.log('-----shopcartRes', res);
 }
 onMounted(() => {
   getReqCartList();

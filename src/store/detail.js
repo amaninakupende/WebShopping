@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
-
 export const useDetailStore = defineStore({
   id: "detail",
   state: () => ({
-    goodInfo: {}
+    goodInfo: {},
+    uuid: ""
   }),
   getters: {
     skuInfo: (state) => state.goodInfo.skuInfo,
@@ -13,6 +13,9 @@ export const useDetailStore = defineStore({
   actions: {
     setGoodInfo(val) {
       this.goodInfo = val;
+    },
+    setuuid(val) {
+      this.uuid = val
     }
   }
 })

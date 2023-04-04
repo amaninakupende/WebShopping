@@ -1,17 +1,9 @@
 <script setup>
 import { computed } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { reqAddOrUpdateShopCart } from '../../api/ajax';
+import { useRoute } from 'vue-router';
 const route = useRoute();
-const router = useRouter();
+
 const skuInfo = computed(() => JSON.parse(sessionStorage.getItem('SKUINFO')))
-// const goToCart = async (id, num) => {
-//   let res = await reqAddOrUpdateShopCart(id, num);
-//   console.log('res----',res)
-//   if(res.code === 200) {
-//     router.push('/shopcart')
-//   } 
-// }
 </script>
 
 <template>
@@ -31,8 +23,6 @@ const skuInfo = computed(() => JSON.parse(sessionStorage.getItem('SKUINFO')))
         <div class="right-gocart">
           <router-link class="sui-btn btn-xlarge" :to="`/detail/${skuInfo.id}`">查看商品详情</router-link>
           <router-link to="/shopcart" >去购物车结算 > </router-link>
-
-          <!-- <button @click="goToCart(skuInfo.id, route.query.skuNum)">去购物车结算 ></button> -->
         </div>
       </div>
     </div>
