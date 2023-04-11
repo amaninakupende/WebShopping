@@ -53,15 +53,6 @@
           </div>
     
           <div class="content">
-            <!-- <form>
-              <div class="input-text clearFix">
-                <input type="text" placeholder="邮箱/用户名/手机号" v-model="phone">
-              </div>
-              <div class="input-text clearFix">
-                <input type="text" placeholder="请输入密码" v-model="password">
-              </div>
-              <button class="btn" @click.prevent="userLogin">登&nbsp;&nbsp;录</button>
-            </form> -->
               <el-form :model="loginParam" :rules="rules" ref="loginForm">
                 <el-form-item prop="username">
                   <el-input v-model="loginParam.username" placeholder="邮箱/用户名/手机号" />

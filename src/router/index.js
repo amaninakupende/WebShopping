@@ -49,11 +49,31 @@ const routes = [
         component: () => import('../pages/register/index.vue'),
         meta: { show: false }
     },
+    {
+        path: '/trade',
+        name: 'trade',
+        component: () => import('../pages/trade/index.vue'),
+        meta: { show: false }
+    },
 ]
 
 const router = createRouter({
     history: createWebHashHistory(),
     routes,
 })
-
+router.beforeEach((to, from) => {
+    let token = ""
+    if(window.localStorage.getItem('user')) {
+        token = JSON.parse(window.localStorage.getItem('user')).token;
+    }
+    if(token) {   //已登录 无法进入登录/注册页面
+        if(to.path == '/login' || to.path == '/register') {
+            return '/home'
+        }
+    } else {      //未登录 无法进入订单管理
+        if(to.path == '/trade') {
+            return '/login'
+        }
+    }
+})
 export default router

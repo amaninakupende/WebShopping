@@ -14,15 +14,17 @@ const keyword = ref('');
 emitter.on('delKeyword', () => {
   keyword.value = ''
 })
+// if(window.localStorage.getItem('user')) {
+//   userName.value = JSON.parse(window.localStorage.getItem('user')).user
+// }
 
-// userName.value = JSON.parse(window.localStorage.getItem('user')).user
 const goSearch = () => {
   let keywords = keyword.value
-  console.log('====',router );
   router.push({name: 'search', query:{keywords}})
 }
 const logout = ()=> {
   window.localStorage.removeItem('user')
+  userName.value = ""
   router.push({name: 'login'})
 }
 
@@ -105,6 +107,7 @@ const logout = ()=> {
             margin-left: 5px;
             color: black;
             text-decoration: none;
+            cursor: pointer;
           }
 
         }

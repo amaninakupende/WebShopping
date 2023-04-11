@@ -1,12 +1,47 @@
 <script setup>
-import { onMounted } from 'vue';
+import { reqUpdateCheckedByid } from '@/api/ajax'
+import { onMounted, ref } from 'vue';
 import { reqCartList } from '../../api/ajax.js';
 import { useRoute } from 'vue-router';
 const route = useRoute();
 
+const cartInfoList = ref({});
+
+
 const getReqCartList = async () => {
   let res = await reqCartList();
   console.log('-----shopcartRes', res);
+  if(res.code === 200) {
+    cartInfoList.value = res.data[0].cartInfoList || []
+  }
+}
+const handler = (type, num, cart) => {
+  switch(type) {
+    case "minus": 
+      num = cart.skuNum > 1 ? -1 : 0;
+      break;
+    case "change":
+      if (isNaN(num) || num < 1) {
+        num = 0;
+      } else {
+        num = parseInt(num) - cart.skuNum;
+      }
+      break;
+    case "add": 
+      num = 1;
+      break;
+  }
+}
+const updateChecked = async (cart, event) => {
+  try {
+    let isChecked = event.target.checked ? "1" : "0";
+    let res = await reqUpdateCheckedByid(cart.skuId, isChecked);
+    if(res.code === 200) {
+      getReqCartList();
+    }
+  } catch (error) {
+    alert(error.message);
+  }
 }
 onMounted(() => {
   getReqCartList();
@@ -25,11 +60,12 @@ onMounted(() => {
         <div class="cart-th5">小计（元）</div>
         <div class="cart-th6">操作</div>
       </div>
-      <!-- <div class="cart-body">
-        <ul class="cart-list" v-for="cart in cartInfoList" :key="cart.id">
+      <div class="cart-body">
+        <ul class="cart-list" v-for="(cart, id) in cartInfoList" :key="id">
           <li class="cart-list-con1">
             <input
               type="checkbox"
+              class="checkbox"
               name="chk_list"
               :checked="cart.isChecked == 1"
               @change="updateChecked(cart, $event)"
@@ -69,16 +105,32 @@ onMounted(() => {
             <span class="sum">{{ cart.skuNum * cart.skuPrice }}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none" class="sindelet" @click="deleteCartById(cart)"
-              >删除</a
-            >
-            <br />
-            <a href="#none">移到收藏</a>
+            <el-button class="sindelet" @click="deleteCartById(cart)">删除</el-button>
           </li>
         </ul>
-      </div> -->
+      </div>
     </div>
-
+    <div class="cart-tool">
+      <div class="select-all">
+        <input
+          class="chooseAll"
+          type="checkbox"
+          :checked="isAllCheck&&cartInfoList.length>0"
+          @change="updateAllCartChecked"
+        />
+        <span>全选</span>
+      </div>
+      <div class="money-box">
+        <div class="chosed">已选择 <span>0 </span>件商品</div>
+        <div class="sumprice">
+          <span>总价：</span>
+          <i class="summoney">{{ totalPrice }}</i>
+        </div>
+        <div class="sumbtn">
+          <router-link class="sum-btn" to="/trade">结算</router-link>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -102,6 +154,7 @@ onMounted(() => {
 
       & > div {
         float: left;
+        font-size: 18px;
       }
 
       .cart-th1 {
@@ -136,13 +189,18 @@ onMounted(() => {
         padding: 10px;
         border-bottom: 1px solid #ddd;
         overflow: hidden;
-
+        list-style: none;
+        
         & > li {
           float: left;
         }
 
         .cart-list-con1 {
           width: 15%;
+          .checkbox {
+            width: 20px;
+            height: 20px;
+          }
         }
 
         .cart-list-con2 {
@@ -163,11 +221,14 @@ onMounted(() => {
         }
 
         .cart-list-con4 {
-          width: 10%;
+          width: 11%;
+          .price {
+            font-size: 18px;
+          }
         }
 
         .cart-list-con5 {
-          width: 17%;
+          width: 15%;
 
           .mins {
             border: 1px solid #ddd;
@@ -176,7 +237,7 @@ onMounted(() => {
             color: #666;
             width: 6px;
             text-align: center;
-            padding: 8px;
+            padding: 6px;
           }
 
           input {
@@ -187,7 +248,9 @@ onMounted(() => {
             text-align: center;
             font-size: 14px;
           }
-
+          input:focus {
+            outline: none;
+          }
           .plus {
             border: 1px solid #ddd;
             border-left: 0;
@@ -195,23 +258,23 @@ onMounted(() => {
             color: #666;
             width: 6px;
             text-align: center;
-            padding: 8px;
+            padding: 6px;
           }
         }
 
         .cart-list-con6 {
-          width: 10%;
+          width: 11%;
 
           .sum {
-            font-size: 16px;
+            font-size: 18px;
           }
         }
 
         .cart-list-con7 {
           width: 13%;
 
-          a {
-            color: #666;
+          .sindelet {
+            font-size: 17px;
           }
         }
       }
@@ -223,43 +286,35 @@ onMounted(() => {
     border: 1px solid #ddd;
 
     .select-all {
-      padding: 10px;
+      padding: 15px;
       overflow: hidden;
       float: left;
 
       span {
         vertical-align: middle;
+        font-style: 18px;
+        margin-left: 5px;
       }
 
       input {
         vertical-align: middle;
+        width: 20px;
+        height: 20px;
       }
     }
-
-    .option {
-      padding: 10px;
-      overflow: hidden;
-      float: left;
-
-      a {
-        float: left;
-        padding: 0 10px;
-        color: #666;
-      }
-    }
-
+  
     .money-box {
       float: right;
-
+      font-size: 18px;
       .chosed {
-        line-height: 26px;
+        line-height: 52px;
         float: left;
         padding: 0 10px;
       }
 
       .sumprice {
         width: 200px;
-        line-height: 22px;
+        line-height: 52px;
         float: left;
         padding: 0 10px;
 
@@ -273,6 +328,7 @@ onMounted(() => {
         float: right;
 
         a {
+          text-decoration: none;
           display: block;
           position: relative;
           width: 96px;

@@ -27,3 +27,7 @@ export const reqCartList = () => {
 export const reqAddOrUpdateShopCart = (skuId, skuNum) => {
   return Axios.post(`/cart/addToCart/${skuId}/${skuNum}`).then(res => res.data);
 }
+
+export const reqUpdateCheckedByid = (skuId, isChecked) => {
+  return Axios.get(`/cart/checkCart/${skuId}/${isChecked}`).then(res => res.data)
+}
